@@ -109,6 +109,54 @@
   width: 22px;
   height: 22px;
 }
+.ios18 .settings-restart-group {
+  margin-top: 18px;
+}
+.ios18 .settings-restart-row {
+  color: #b36b00;
+  cursor: pointer;
+}
+.ios18 .settings-restart-dialog {
+  position: fixed;
+  z-index: 300;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #0005;
+  backdrop-filter: blur(8px);
+}
+.ios18 .settings-restart-card {
+  width: min(300px, 100%);
+  padding: 22px;
+  border-radius: 20px;
+  background: #f8f8f8;
+  box-shadow: 0 20px 60px #0005;
+  text-align: center;
+}
+.ios18 .settings-restart-card h2 {
+  margin: 0;
+  font-size: 19px;
+}
+.ios18 .settings-restart-card p {
+  margin: 10px 0 20px;
+  color: #6c6c70;
+  line-height: 1.5;
+}
+.ios18 .settings-restart-actions {
+  display: grid;
+  gap: 8px;
+}
+.ios18 .settings-restart-actions button {
+  min-height: 40px;
+  border-radius: 10px;
+  background: #e7e7eb;
+}
+.ios18 .settings-restart-actions .confirm {
+  background: #ff9500;
+  color: #fff;
+  font-weight: 650;
+}
 /* WeChat has its own flat chrome; system glass does not bleed into this App. */
 .ios18 .wechat-ui {
   background: #ededed;

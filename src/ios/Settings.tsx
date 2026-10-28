@@ -18,6 +18,7 @@ import {
   Link,
   Globe,
   Mic,
+  RotateCcw,
 } from "lucide-react";
 import type { Work, Item } from "../schema";
 import { IOSToggle } from "../vendor/konsta/Toggle";
@@ -51,19 +52,22 @@ export function NativeSettings({
   creator,
   onItem,
   onSettings,
+  onRestart,
 }: {
   work: Work;
   items: Item[];
   creator: boolean;
   onItem: (i: Item) => void;
   onSettings?: () => void;
+  onRestart?: () => void;
 }) {
   const nav = useNavigation(),
     [query, setQuery] = useState(""),
     [airplane, setAirplane] = useState(false),
     [wifi, setWifi] = useState(true),
     [bluetooth, setBluetooth] = useState(true),
-    [lowPower, setLowPower] = useState(false);
+    [lowPower, setLowPower] = useState(false),
+    [confirmRestart, setConfirmRestart] = useState(false);
   const row = (label: string, value?: string, click?: () => void) => (
     <button key={label} className="settings-native-row" onClick={click}>
       <span>{label}</span>
@@ -270,6 +274,20 @@ export function NativeSettings({
                   ))}
               </div>
             ))}
+            {onRestart && (
+              <div className="settings-group settings-restart-group">
+                <button
+                  className="settings-native-row settings-restart-row"
+                  onClick={() => setConfirmRestart(true)}
+                >
+                  <span className="settings-glyph" style={{ background: "#ff9500" }}>
+                    <RotateCcw size={21} />
+                  </span>
+                  <span>重新开始游戏</span>
+                  <ChevronRight size={16} />
+                </button>
+              </div>
+            )}
           </>
         )}
         {items
@@ -300,6 +318,26 @@ export function NativeSettings({
           />
           <Mic size={22} aria-hidden="true" />
         </label>
+      )}
+      {confirmRestart && onRestart && (
+        <div className="settings-restart-dialog" role="dialog" aria-modal="true">
+          <div className="settings-restart-card">
+            <h2>重新开始游戏？</h2>
+            <p>重新开始会清除当前选择和剧情进度。</p>
+            <div className="settings-restart-actions">
+              <button onClick={() => setConfirmRestart(false)}>取消</button>
+              <button
+                className="confirm"
+                onClick={() => {
+                  setConfirmRestart(false);
+                  onRestart();
+                }}
+              >
+                确认重新开始
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

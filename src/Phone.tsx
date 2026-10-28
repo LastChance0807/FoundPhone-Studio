@@ -241,6 +241,23 @@ function PhoneRuntime({
     setOwn(next);
     onRuntime?.(next);
   };
+  const restartGame = () => {
+    const reset = initialRuntime(work);
+    void db.saves.delete(work.id);
+    update(reset);
+    setApp("");
+    setFolder("");
+    setPanel("");
+    setRecent([]);
+    setContextApp("");
+    setBanner("");
+    setQuickCamera(false);
+    setKeyboard(false);
+    setPinOpen(false);
+    setPinError("");
+    setLocked(true);
+    setHomeRequest((value) => value + 1);
+  };
   useEffect(() => {
     let active = true;
     if (creator || external) return;
@@ -514,6 +531,7 @@ function PhoneRuntime({
                   onAdd={() => onAdd?.(app)}
                   onBack={() => setApp("")}
                   onSettings={onSettings}
+                  onRestart={restartGame}
                   onUi={(key, value) => {
                     const current = runtimeRef.current;
                     update(
@@ -922,6 +940,7 @@ function AppContent({
   onAdd,
   onBack,
   onSettings,
+  onRestart,
   onUi,
   work,
 }: {
@@ -935,6 +954,7 @@ function AppContent({
   onAdd: () => void;
   onBack: () => void;
   onSettings?: () => void;
+  onRestart?: () => void;
   onUi?: (key: string, value: UiValue) => void;
   work: Work;
 }) {
@@ -1119,6 +1139,7 @@ function AppContent({
           creator={creator}
           onItem={read}
           onSettings={onSettings}
+          onRestart={onRestart}
         />
       ) : app.id === "calculator" && !detail ? (
         <NativeCalculator
