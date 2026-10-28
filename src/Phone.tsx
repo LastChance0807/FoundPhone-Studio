@@ -337,8 +337,6 @@ function PhoneRuntime({
   }, [app, work.apps]);
   const displayTime = creator ? work.phone.time : s.time || work.phone.time;
   const plugin = getApp(app);
-  if (!creator && ready && !s.variables.setupComplete)
-    return <SetupScreen work={work} onComplete={(values) => update({ ...runtimeRef.current, variables: { ...runtimeRef.current.variables, ...values } })} />;
   useEffect(() => {
     const count = s.notifications.length;
     if (!locked && work.phone.notifications && count > noticesSeen.current) {
@@ -356,6 +354,18 @@ function PhoneRuntime({
         (_, i) => i !== index,
       ),
     });
+  if (!creator && ready && !s.variables.setupComplete)
+    return (
+      <SetupScreen
+        work={work}
+        onComplete={(values) =>
+          update({
+            ...runtimeRef.current,
+            variables: { ...runtimeRef.current.variables, ...values },
+          })
+        }
+      />
+    );
   if (!ready) return <div className="phone-loading">正在恢复进度…</div>;
   return (
     <div
