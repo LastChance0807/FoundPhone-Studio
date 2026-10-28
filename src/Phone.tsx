@@ -156,6 +156,10 @@ function SetupScreen({
     </div>
   </div>;
 }
+function runtimePlayerName(runtime: Runtime, fallback = "TME") {
+  const value = runtime.variables.playerName;
+  return typeof value === "string" && value.trim() ? value.trim() : fallback;
+}
 function PhoneRuntime({
   deviceLayout,
   work,
@@ -234,6 +238,17 @@ function PhoneRuntime({
     };
   }, [creator, ready]);
   const s = external ?? own;
+  const playerName = creator ? work.phone.owner : runtimePlayerName(s);
+  const displayWork =
+    work.phone.owner === playerName
+      ? work
+      : { ...work, phone: { ...work.phone, owner: playerName } };
+  const displayItems = (items: Item[]) =>
+    items.map((item) =>
+      item.outgoing || item.sender === work.phone.owner
+        ? { ...item, sender: playerName }
+        : item,
+    );
   const runtimeRef = useRef(s);
   runtimeRef.current = s;
   const update = (next: Runtime) => {
@@ -492,8 +507,11 @@ function PhoneRuntime({
               <DeviceLock
                 work={
                   s.date
-                    ? { ...work, phone: { ...work.phone, date: s.date } }
-                    : work
+                    ? {
+                        ...displayWork,
+                        phone: { ...displayWork.phone, date: s.date },
+                      }
+                    : displayWork
                 }
                 time={displayTime}
                 notices={s.notifications}
@@ -521,8 +539,8 @@ function PhoneRuntime({
                     work.apps.find((a) => a.id === app)?.name ?? plugin.name
                   }
                   items={[
-                    ...(work.data[app] ?? []),
-                    ...(s.messages[app] ?? []),
+                    ...displayItems(work.data[app] ?? []),
+                    ...displayItems(s.messages[app] ?? []),
                   ]}
                   creator={creator}
                   state={s}
@@ -549,7 +567,7 @@ function PhoneRuntime({
                       ),
                     );
                   }}
-                  work={work}
+                  work={displayWork}
                 />
               </AppWindow>
             ) : (
@@ -559,7 +577,7 @@ function PhoneRuntime({
                 }
                 storeOpen={app === "appstore"}
                 closeStore={() => setApp("")}
-                work={work}
+                work={displayWork}
                 layout={deviceLayout.layout}
                 change={deviceLayout.change}
                 importLayout={deviceLayout.importLayout}

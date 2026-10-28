@@ -736,7 +736,7 @@
       }
     ]
   },
-  "variables": {"setupComplete": false},
+  "variables": {"setupComplete": false, "playerName": "TME"},
   "events": [],
   "tests": []
 }
