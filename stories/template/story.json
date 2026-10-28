@@ -1,13 +1,14 @@
 {
   "scriptVersion": 1,
   "id": "ui-test-phone-v2",
-  "title": "捡手机",
-  "description": "仅用于界面测试，不含剧情",
-  "revision": 2,
+  "title": "危险关系",
+  "description": "打开属于你的宝石盒吧。",
+  "revision": 3,
   "phone": {
     "owner": "机主",
     "date": "2026-10-25",
     "time": "09:41",
+    "passcode": "0807",
     "battery": 94,
     "network": "5G",
     "wallpaper": "apple-wwdc26"
@@ -298,6 +299,48 @@
       }
     ],
     "notes": [
+      {
+        "id": "setup-lead-choi",
+        "title": "崔玹硕",
+        "body": "（待填充）",
+        "meta": {"setupType": "lead", "leadId": "choi-hyunsuk"}
+      },
+      {
+        "id": "setup-lead-park",
+        "title": "朴志焄",
+        "body": "（待填充）",
+        "meta": {"setupType": "lead", "leadId": "park-jihoon"}
+      },
+      {
+        "id": "setup-lead-kim",
+        "title": "金本芳典",
+        "body": "（待填充）",
+        "meta": {"setupType": "lead", "leadId": "kim-bonhyangjeon"}
+      },
+      {
+        "id": "setup-relation-choi-park",
+        "title": "关系一",
+        "body": "（待填充）",
+        "meta": {"setupType": "relation", "relationId": "choi-park", "summary": "（关系一）"}
+      },
+      {
+        "id": "setup-relation-kim-park",
+        "title": "关系二",
+        "body": "（待填充）",
+        "meta": {"setupType": "relation", "relationId": "kim-park", "summary": "（关系二）"}
+      },
+      {
+        "id": "setup-relation-kim-choi",
+        "title": "暂未关联",
+        "body": "（待填充）",
+        "meta": {"setupType": "relation", "relationId": "kim-choi", "summary": "这两个人暂时没什么关联……"}
+      },
+      {
+        "id": "setup-relation-trio",
+        "title": "三人关系",
+        "body": "（待填充）",
+        "meta": {"setupType": "relation", "relationId": "trio", "summary": "（待填充）"}
+      },
       {
         "id": "test-item-notes",
         "title": "测试内容",
@@ -693,7 +736,7 @@
       }
     ]
   },
-  "variables": {},
+  "variables": {"setupComplete": false},
   "events": [],
   "tests": []
 }

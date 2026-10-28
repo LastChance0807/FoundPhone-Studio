@@ -21,6 +21,33 @@
 body {
   margin: 0;
 }
+.story-setup {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  color: #173b58;
+  background: linear-gradient(145deg, #dff4ff, #b9dcf2 55%, #eefaff);
+}
+.story-setup-card { width: min(520px, 100%); padding: 34px; border: 1px solid #fff9; border-radius: 28px; background: #f8fdffdd; box-shadow: 0 24px 70px #4b89aa33; backdrop-filter: blur(16px); }
+.story-setup-kicker { color: #5d93b2; font-size: 11px; letter-spacing: 2px; }
+.story-setup h1 { margin-top: 8px; font-size: 36px; letter-spacing: 5px; }
+.story-setup-subtitle { margin: 10px 0 26px; color: #5f7f91; }
+.story-setup-label { display: grid; gap: 8px; font-weight: 650; }
+.story-setup input { border-color: #b5d6e8; background: #fff; }
+.story-setup h2 { margin: 24px 0 12px; font-size: 18px; }
+.story-setup-options { display: grid; gap: 10px; }
+.story-setup-options button, .story-setup-back { justify-content: space-between; width: 100%; padding: 14px 16px; border: 1px solid #bedbea; border-radius: 14px; background: #fff; color: #245775; }
+.story-setup-back { justify-content: flex-start; width: auto; padding: 8px 0; border: 0; background: transparent; }
+.story-setup-leads { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.story-setup-lead { position: relative; display: grid; align-content: start; gap: 8px; min-height: 100px; padding: 14px 10px; border: 1px solid #bfdceb; border-radius: 15px; background: #fff; text-align: center; color: #245775; }
+.story-setup-lead small { color: #7795a5; line-height: 1.5; }
+.story-setup-lead.selected { border-color: #398bc0; background: #dff3ff; box-shadow: 0 0 0 3px #62b8e933; }
+.story-setup-lead em { font-size: 11px; color: #1671a5; font-style: normal; }
+.story-setup-relation { margin-top: 16px; padding: 16px; border-radius: 16px; background: #e7f6ff; text-align: center; }
+.story-setup-relation p { margin-top: 8px; color: #638294; line-height: 1.6; }
+.story-setup-unlock { width: 100%; margin-top: 22px; padding: 14px; border-radius: 14px; background: #398bc0; color: white; font-weight: 700; }
+@media (max-width: 520px) { .story-setup-card { padding: 24px 18px; } .story-setup-leads { grid-template-columns: 1fr; } }
 button,
 input,
 textarea,

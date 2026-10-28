@@ -111,6 +111,51 @@ export function Phone(props: PhoneProps) {
     />
   );
 }
+function SetupScreen({
+  work,
+  onComplete,
+}: {
+  work: Work;
+  onComplete: (values: Record<string, string | number | boolean>) => void;
+}) {
+  const [name, setName] = useState("TME");
+  const [mode, setMode] = useState("");
+  const [leads, setLeads] = useState<string[]>([]);
+  const [relation, setRelation] = useState("");
+  const notes = work.data.notes ?? [];
+  const leadData = notes.filter((x) => x.meta.setupType === "lead");
+  const relationData = notes.filter((x) => x.meta.setupType === "relation");
+  const trioIds = leadData.map((x) => x.meta.leadId || "");
+  const relationFor = (ids: string[]) => {
+    const key = ids.slice().sort().join("+");
+    return relationData.find((x) => {
+      const id = x.meta.relationId || "";
+      return (key === "choi-hyunsuk+park-jihoon" && id === "choi-park") ||
+        (key === "kim-bonhyangjeon+park-jihoon" && id === "kim-park") ||
+        (key === "choi-hyunsuk+kim-bonhyangjeon" && id === "kim-choi");
+    });
+  };
+  const chooseLead = (id: string) => {
+    if (mode === "single") setLeads([id]);
+    if (mode === "double" && !leads.includes(id) && leads.length < 2)
+      setLeads([...leads, id]);
+  };
+  const ready = mode === "trio" || (mode === "single" && leads.length === 1) || (mode === "double" && leads.length === 2);
+  const selectedRelation = mode === "double" ? relationFor(leads) : mode === "trio" ? relationData.find((x) => x.meta.relationId === "trio") : undefined;
+  return <div className="story-setup">
+    <div className="story-setup-card">
+      <p className="story-setup-kicker">FOUND PHONE · OPENING</p>
+      <h1>危险关系</h1><p className="story-setup-subtitle">打开属于你的宝石盒吧。</p>
+      <label className="story-setup-label">玩家昵称<input aria-label="玩家昵称" value={name} onChange={(e) => setName(e.target.value)} placeholder="TME" /></label>
+      {!mode && <div className="story-setup-options"><h2>选择游戏模式</h2>{[["single","单刀赴会"],["double","双人成行"],["trio","三人行必有我师"]].map(([id,label]) => <button key={id} onClick={() => { setMode(id); if (id === "trio") setLeads(trioIds); }}>{label}<span>›</span></button>)}</div>}
+      {mode && <>
+        <button className="story-setup-back" onClick={() => { setMode(""); setLeads([]); setRelation(""); }}>‹ 返回模式选择</button>
+        {mode === "trio" ? <div className="story-setup-relation"><h2>三位男主</h2><div className="story-setup-leads">{leadData.map((x) => <div className="story-setup-lead selected" key={x.meta.leadId}><b>{x.title}</b><small>{x.body}</small></div>)}</div><p>{selectedRelation?.meta.summary}</p></div> : <><h2>{mode === "single" ? "选择一位男主" : "依次选择两位男主"}</h2><div className="story-setup-leads">{leadData.map((x) => { const selected = leads.includes(x.meta.leadId || ""); return <button className={`story-setup-lead ${selected ? "selected" : ""}`} key={x.meta.leadId} onClick={() => chooseLead(x.meta.leadId || "")}><b>{x.title}</b><small>{x.body}</small>{selected && <em>{mode === "double" ? leads.indexOf(x.meta.leadId || "") + 1 : "已选"}</em>}</button>; })}</div>{mode === "double" && selectedRelation && <div className="story-setup-relation"><h3>{selectedRelation.meta.summary}</h3><p>{selectedRelation.body}</p></div>}</>}
+        <button className="story-setup-unlock" disabled={!ready} onClick={() => onComplete({ setupComplete: true, playerName: name.trim() || "TME", gameMode: mode, lead1: leads[0] || "", lead2: leads[1] || "", lead3: mode === "trio" ? leads[2] || "" : "", relationId: selectedRelation?.meta.relationId || relation })}>解锁手机</button>
+      </>}
+    </div>
+  </div>;
+}
 function PhoneRuntime({
   deviceLayout,
   work,
@@ -292,6 +337,8 @@ function PhoneRuntime({
   }, [app, work.apps]);
   const displayTime = creator ? work.phone.time : s.time || work.phone.time;
   const plugin = getApp(app);
+  if (!creator && ready && !s.variables.setupComplete)
+    return <SetupScreen work={work} onComplete={(values) => update({ ...runtimeRef.current, variables: { ...runtimeRef.current.variables, ...values } })} />;
   useEffect(() => {
     const count = s.notifications.length;
     if (!locked && work.phone.notifications && count > noticesSeen.current) {
