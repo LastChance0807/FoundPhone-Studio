@@ -167,7 +167,14 @@ export function initialRuntime(w: Work): Runtime {
     ui: {},
     workId: w.id,
     revision: w.updatedAt,
-    variables: { ...w.variables },
+    variables: {
+      ...w.variables,
+      playerName:
+        typeof w.variables.playerName === "string" &&
+        w.variables.playerName.trim()
+          ? w.variables.playerName
+          : "TME",
+    },
     visited: [],
     read: [],
     clues: [],
